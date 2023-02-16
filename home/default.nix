@@ -21,5 +21,9 @@
     unzip
     wget
     zip
+    openvpn
+    vim
+    meld
+    lsof
   ];
 }

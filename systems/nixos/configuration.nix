@@ -11,9 +11,18 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  # Setup keyfile
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = null;
+  };
+
+  # Enable swap on luks
+  boot.initrd.luks.devices."luks-27da2bce-9f3e-4fdc-b280-77023f2c7cb6".device = "/dev/disk/by-uuid/27da2bce-9f3e-4fdc-b280-77023f2c7cb6";
+  boot.initrd.luks.devices."luks-27da2bce-9f3e-4fdc-b280-77023f2c7cb6".keyFile = "/crypto_keyfile.bin";
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -34,9 +43,9 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # Enable the GNOME Desktop Environment.
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -68,10 +77,14 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jdoe = {
+  users.users.aaronnewton = {
     isNormalUser = true;
-    description = "Jane Doe";
+    description = "Aaron Newton";
     extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+      firefox
+    #  thunderbird
+    ];
   };
 
   # Allow unfree packages
@@ -110,5 +123,13 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
+
+    # Custom programs
+#  let pkgs = import <nixpkgs> {};
+#  in pkgs.callPackage (
+#    # whatever is in hello.nix
+#    git
+#  ) {}
+
 
 }

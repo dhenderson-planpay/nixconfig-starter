@@ -10,11 +10,10 @@
     let
       users = {
         me = {
-          # CHANGE ME TO YOUR USER
-          name = "Jane Doe";
-          username = "jdoe";
-          homeDirectory = "/home/jdoe";
-          email = "jane.doe@example.com";
+          name = "Aaron Newton";
+          username = "aaronnewton";
+          homeDirectory = "/home/aaronnewton";
+          email = "aaron.newton@playtravel.com.au";
         };
         docker = {
           name = "Docker User";
@@ -52,8 +51,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                # CHANGE 'jdoe' TO YOUR USERNAME
-                users.jdoe = {
+                users.aaronnewton = {
                   imports = [
                     ./home/default.nix
                     ./home/graphical.nix
