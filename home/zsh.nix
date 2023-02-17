@@ -15,6 +15,8 @@
       [ -f $HOME/.nix-profile/etc/profile.d/nix.sh ] && source $HOME/.nix-profile/etc/profile.d/nix.sh
       export EDITOR=nvim
       export GOPATH=$HOME/go
+      # Added ~/bin to PATH for Aaron's custom tools, including exercism
+      export PATH=~/bin:$PATH
     '';
 
     oh-my-zsh = {
