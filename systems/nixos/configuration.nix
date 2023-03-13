@@ -56,6 +56,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Enable ClamAv virus scanning
+  services.clamav.daemon.enable = true;
+  services.clamav.updater.enable = true;
+
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
