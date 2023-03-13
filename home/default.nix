@@ -25,5 +25,6 @@
     vim
     meld
     lsof
+    clamav
   ];
 }
