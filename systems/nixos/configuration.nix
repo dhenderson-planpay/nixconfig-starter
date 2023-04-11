@@ -107,6 +107,14 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # enable nvidia drivers, you are required to use allowUnfree as above
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
+  
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+  hardware.nvidia.modesetting.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
