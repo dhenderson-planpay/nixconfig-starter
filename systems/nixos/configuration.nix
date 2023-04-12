@@ -100,6 +100,7 @@
     shell = "/etc/profiles/per-user/danielh/bin/zsh";
     packages = with pkgs; [
       firefox
+      drawio
     #  thunderbird
     ];
   };
