@@ -1,12 +1,13 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
       users = {
         me = {
@@ -22,9 +23,12 @@
           email = "docker@example.com";
         };
       };
-      pkgsForSystem = { system }: import nixpkgs {
+      pkgsForSystem = { system, pkgs ? nixpkgs }: import pkgs {
         inherit system;
         config.allowUnfree = true;
+	
+	# allows you to use unstable packages with pkgs.unstable.<foo>
+	overlays = [ (final: prev: { unstable = pkgsForSystem { inherit system; pkgs = nixpkgs-unstable; }; }) ];
       };
     in
     {
