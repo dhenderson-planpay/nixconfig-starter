@@ -24,6 +24,7 @@
       plugins = [
         "aws"
         "docker"
+	"kubectl"
         "direnv"
         "encode64"
         "git"

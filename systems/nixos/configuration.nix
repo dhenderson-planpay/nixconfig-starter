@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -52,15 +52,16 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
-  # Enable Cinnamon Desktop environment
+  # Enable KDE Desktop environment
   services.xserver = {
     enable = true;
     libinput.enable = true;
-    displayManager.lightdm.enable = true;
+    displayManager.sddm.enable = true;
     desktopManager = {
-    cinnamon.enable = true;
+    plasma5.enable = true;
     };
-    displayManager.defaultSession = "cinnamon";
+    dpi = 96;
+    displayManager.defaultSession = "plasma";
   };
 
   # Configure keymap in X11
@@ -119,12 +120,22 @@
   nixpkgs.config.allowUnfree = true;
 
   # enable nvidia drivers, you are required to use allowUnfree as above
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" "displaylink" "modesetting" ];
   hardware.opengl.enable = true;
   
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.nvidia.powerManagement.enable = true;
+  hardware.nvidia.prime = {
+    sync.enable = true;
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:1:0:0";
+  };
 
-  hardware.nvidia.modesetting.enable = true;
+  services.xserver.displayManager.sessionCommands = ''
+    ${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
+  '';
+ 
+#  hardware.nvidia.modesetting.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -132,6 +143,9 @@
     inter
     oxygenfonts
     piper
+    nodePackages.pm2
+    libsForQt5.plasma-browser-integration
+    mysql80
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
